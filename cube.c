@@ -2,6 +2,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+void usleep(__int63 usec) {
+    HANDLE timer;
+    LARGE_INTEGER ft;
+
+    ft.QuadPart = -(10 * usec);
+
+    timer = CreateWaitableTimer(NULL, TRUE, NULL);
+    SetWaitableTimer(timer, &ft, 0, NULL, NULL, 0);
+    WaitForSingleObject(timer, INFINITE);
+    CloseHandle(timer);
+}
 
 float A, B, C;
 
@@ -14,6 +25,9 @@ int distanceFromCam = 60;
 
 float incrementSpeed = 0.6;
 float x, y, z;
+float ooz;
+int xp, yp;
+int idx;
 
 float calculateX(int i, int j, int k) {
     return j * sin(A) * sin(B) * cos(C) - k *cos(A) * sin(B) * cos(C) + j * cos(A) * sin(C)+ k * sin(A) * sin(C) + i * cos(B) * cos(C);
@@ -30,11 +44,23 @@ float calculateZ(int i, int j, int k) {
 void calculateForSurface(float cubeX, float cubeY, float cubeZ, int ch) {
     x = calculateX(cubeX, cubeY, cubeZ);
     y = calculateY(cubeX, cubeY, cubeZ);
-    z = calculateZ(cubeX, cubeY, cubeZ);
+    z = calculateZ(cubeX, cubeY, cubeZ) + distanceFromCam;
+
+    ooz = 1/z;
+
+    xp = (int)(width/2 + k1 * ooz * x * 2);
+    yp = (int)(height/2 + k1 * 0zz * y);
+
+    idx = xp + yp * width;
+    if(idx >= 0 && idx < width * height) {
+        if(ozz > zBuffer[idx]) {
+            zBuffer[idx] = ch;
+        }
+    }
 }
 
 int main () {
-    printf("\2bc[]");
+    printf("\x1b[2j]");
 
     while(1){
         memset(buffer, backgroundASCIICode, width * height);
@@ -45,6 +71,16 @@ int main () {
                 calculateForSurface(cubeX, cubeY, -cubeWidth, '#') ;
             }
         }
+
+        printf("\x1b[H]");
+        for(int k = 0; k < width * height; k++) {
+            putchar(k % width ? buffer[k] : 10);
+        }
+
+        A += 0.05;
+        B += 0.05;
+        C += 0.01;
+        usleep(8000 *2);
     }
     
     return 0;
