@@ -4,9 +4,9 @@ The program starts by loading up some standard libraries for math, input/output,
 
 It defines several global variables to track the rotation angles of the cubes (A, B, C), the size of the cubes, the dimensions of the screen, a buffer to store depth information, another buffer for the characters to be displayed, and the distance from the camera to the cubes.
 
-To figure out where the points of the cube should go after rotating, it has three functions: calculateX, calculateY, and calculateZ. These use trigonometric functions like sine and cosine to do the rotations.
+To figure out where the points of the cube should go after rotating, it has three functions: 'calculateX', 'calculateY', and 'calculateZ'. These use trigonometric functions like sine and cosine to do the rotations.
 
-The calculateForSurface function takes these 3D points and converts them to 2D coordinates for the screen. It also checks how close each point is to the camera to handle which points should be visible and updates the display buffer with the right characters.
+The 'calculateForSurface' function takes these 3D points and converts them to 2D coordinates for the screen. It also checks how close each point is to the camera to handle which points should be visible and updates the display buffer with the right characters.
 
 In the main function, there's an infinite loop that keeps the animation going. Every time through the loop, it clears the screen and resets the buffers. It then calculates and draws three cubes of different sizes and positions. After updating the buffers, it prints out the new frame to the screen.
 
